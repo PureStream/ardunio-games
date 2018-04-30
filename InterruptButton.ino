@@ -1,7 +1,7 @@
 unsigned long lastInterrupt;
 
 void button_pressed() {
-  if(millis() - lastInterrupt > 500) {
+  if(millis() - lastInterrupt > 300) {
     if (isBegin) {
       isBegin = false;
       if (mode==0||mode==1) {

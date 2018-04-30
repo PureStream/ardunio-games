@@ -33,9 +33,10 @@ void move_led_mode3() {
   digitalWrite(led_array[current_led], LOW);
   if (checkIfStart && !outOfBound) {
     if (current_led==8||current_led==0) {
-      delay_time -= (difficulty<8) ? 10+(difficulty*3) : 74;
+      delay_time -= (difficulty<8) ? 10+(ceil((float)((difficulty*19)/7))) : (delay_time==50) ? 0 : 50;
+      Serial.println(delay_time);
       score++;
-      if (delay_time<=0 || (score==10 && difficulty<8)) {
+      if (score==10 && difficulty<8) {
         game_ended = true;
         is_win = true;
       }

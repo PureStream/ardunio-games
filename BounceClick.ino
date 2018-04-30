@@ -1,13 +1,12 @@
 void doubleClick() {
   if (is_finished_selecting && mode==4) {
-    Serial.print(current_led+5); Serial.println(" " + String(patterns[currentPos]));
-    if (current_led+5 != patterns[currentPos]) {
+    if (current_led != 8-patterns[currentPos]) {
       game_ended = true;
       stillSelect = false;
     }
     currentPos++;
-    if (currentPos >= pos1) stillSelect = false;
-    if (currentPos > numbersOfPlay) {
+    if (currentPos >= arrayPos) stillSelect = false;
+    if ((currentPos >= numbersOfPlay) && !game_ended) {
       game_ended = true;
       is_win = true;
     }
@@ -16,7 +15,6 @@ void doubleClick() {
       delay(100);
       digitalWrite(led_array[current_led], HIGH);
     }
-    digitalWrite(led_array[current_led], LOW);
   }
   else if (!is_finished_mode) {
     is_finished_mode = true;
@@ -25,14 +23,14 @@ void doubleClick() {
   }
   else {
     is_finished_selecting = true;
-    if (mode==0) delay_time = (difficulty<8) ? floor(500/(difficulty+2)) : 35; 
+    if (mode==0) delay_time = (difficulty<8) ? floor(500/(difficulty+2)) : 25; 
     else if (mode==1) {
       mode1DelayA = (!difficulty==8) ? floor(500/((difficulty*5)+10)) : 5;
-      mode1DelayB = (difficulty<5) ? 200 : (difficulty<7) ? 100 : (difficulty==7) ? 75 : 35;
+      mode1DelayB = (difficulty<5) ? 300 : (difficulty<7) ? 200 : (difficulty==7) ? 120 : 30;
     }
     else if (mode==2) delay_time = (difficulty<8) ? floor(500-(difficulty*38)) : 150;
     else if (mode==3) delay_time = floor(500-(difficulty*25));
-    else if (mode==4) numbersOfPlay = 5+difficulty*2;
+    else if (mode==4) numbersOfPlay = (difficulty<8) ? 5+difficulty*2 : 30;
     Serial.println((difficulty<8) ? "Difficulty: " + String(difficulty+1) : "Diffuculty: GOD");
     sweep();
   }
@@ -44,14 +42,14 @@ void click() {
     current_led++;
     if (current_led>3) current_led = 0;
     digitalWrite(led_array[current_led], HIGH);
-    Serial.println("Now selecting: " + String(current_led+1));
+    Serial.println("Now selecting: " + String(current_led));
   }
   else if (!is_finished_mode) {
     digitalWrite(led_array[mode], LOW);
     mode++;
     if (mode>4) mode = 0;
     digitalWrite(led_array[mode], HIGH);
-    Serial.println("Mode: " + String(mode));
+    Serial.println("Mode: " + String(mode+1));
   }
   else {
     digitalWrite(led_array[difficulty], LOW);
